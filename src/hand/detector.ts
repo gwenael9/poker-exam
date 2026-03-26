@@ -150,7 +150,6 @@ export function detectFourOfAKind(
   return null;
 }
 
-
 export function detectStraightFlush(cards: Card[]): HandResult | null {
   const suitGroups = new Map<string, Card[]>();
   for (const card of cards) {

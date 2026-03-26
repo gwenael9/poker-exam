@@ -13,9 +13,9 @@ import {
 } from "./detector";
 
 const detectors: Detector[] = [
+  detectStraightFlush,
   detectFourOfAKind,
   detectFullHouse,
-  detectStraightFlush,
   detectFlush,
   detectStraight,
   detectThreeOfAKind,
