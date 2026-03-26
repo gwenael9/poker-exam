@@ -1,24 +1,12 @@
-import { HandResult } from "@/types";
+import { HAND_CATEGORIES, HandResult } from "@/types";
 
 /**
  * Compare deux résultats de main.
  * Retourne > 0 si handA gagne, < 0 si handB gagne, 0 si égalité.
  */
 export function compareResults(handA: HandResult, handB: HandResult): number {
-  const rankOrder = [
-    "High Card",
-    "One Pair",
-    "Two Pair",
-    "Three of a Kind",
-    "Straight",
-    "Flush",
-    "Full House",
-    "Four of a Kind",
-    "Straight Flush",
-  ];
-
-  const scoreA = rankOrder.indexOf(handA.category);
-  const scoreB = rankOrder.indexOf(handB.category);
+  const scoreA = HAND_CATEGORIES.indexOf(handA.category);
+  const scoreB = HAND_CATEGORIES.indexOf(handB.category);
 
   if (scoreA !== scoreB) return scoreA - scoreB;
 
