@@ -1,12 +1,18 @@
 import { Card } from "@/card";
+import { Category } from "./types";
 
 type HandResult = {
-  category: string;
+  category: Category;
   chosen5: Card[];
 };
 
 function sortDesc(cards: Card[]): Card[] {
   return [...cards].sort((a, b) => b.value - a.value);
+}
+
+function sortGroupsDesc(groups: Map<string, Card[]>): Card[][] {
+  return sortDesc([...groups.values()].map(g => g[0]))
+    .map(c => groups.get(c.rank) ?? []);
 }
 
 function groupByRank(cards: Card[]): Map<string, Card[]> {
@@ -26,38 +32,39 @@ function defaultResult(cards: Card[]): HandResult {
     };
 } 
 
-// function detectOnePair(cards: Card[]): HandResult | null {
-//   const groups = groupByRank(cards);
-//   const pairs = [...groups.values()].filter(g => g.length === 2);
-//   if (pairs.length === 0) return null;
-
-//   const bestPair = sortDesc(pairs.map(p => p[0])).map(c => groups.get(c.rank) ?? [])[0];
-//   const kickers = sortDesc(cards.filter(c => c.rank !== bestPair[0].rank)).slice(0, 3);
-
-//   return {
-//     category: "One Pair",
-//     chosen5: [...bestPair, ...kickers],
-//   };
-// }
-
-function detectOnePair(cards: Card[]): HandResult | null {
-  const groups = groupByRank(cards);
-  const pairs = [...groups.values()].filter(g => g.length === 2);
-  
+function detectOnePair(cards: Card[], groups: Map<string, Card[]>): HandResult | null {
+  const pairs = sortGroupsDesc(groups).filter(g => g.length === 2);
   if (pairs.length === 0) return null;
 
-  const pairsSortedByRank = sortDesc(pairs.map(p => p[0]));
-  const bestPairRank = pairsSortedByRank[0].rank;
-  const bestPair = groups.get(bestPairRank) ?? [];
+  const bestPairRank = pairs[0][0].rank;
   const kickers = sortDesc(cards.filter(c => c.rank !== bestPairRank)).slice(0, 3);
 
   return {
     category: "One Pair",
-    chosen5: [...bestPair, ...kickers],
+    chosen5: [...pairs[0], ...kickers],
+  };
+}
+
+function detectTwoPair(cards: Card[], groups: Map<string, Card[]>): HandResult | null {
+  const pairs = sortGroupsDesc(groups).filter(g => g.length >= 2);
+  console.log("pairs2", pairs)
+  if (pairs.length < 2) return null;
+
+  const usedRanks = new Set([pairs[0][0].rank, pairs[1][0].rank]);
+  const kicker = sortDesc(cards.filter(c => !usedRanks.has(c.rank)))[0];
+
+  return {
+    category: "Two Pair",
+    chosen5: [...pairs[0], ...pairs[1], kicker],
   };
 }
 
 
 export function evaluateHand(cards: Card[]): HandResult {
-  return detectOnePair(cards) ?? defaultResult(cards);
+    const groups = groupByRank(cards);
+    return (
+        detectTwoPair(cards, groups) ??
+        detectOnePair(cards, groups) ??
+        defaultResult(cards)
+    );
 }
