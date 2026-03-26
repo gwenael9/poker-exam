@@ -2,16 +2,20 @@ import { Card } from "@/card";
 import { Detector, HandResult } from "@/types";
 import { defaultResult, groupByRank } from "./util";
 import {
+  detectStraightFlush,
   detectStraight,
   detectFlush,
   detectFullHouse,
+  detectFourOfAKind,
   detectThreeOfAKind,
   detectTwoPair,
   detectOnePair,
 } from "./detector";
 
 const detectors: Detector[] = [
+  detectFourOfAKind,
   detectFullHouse,
+  detectStraightFlush,
   detectFlush,
   detectStraight,
   detectThreeOfAKind,

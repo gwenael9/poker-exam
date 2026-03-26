@@ -131,3 +131,51 @@ export function detectFullHouse(
 
   return null;
 }
+
+export function detectFourOfAKind(
+  cards: Card[],
+  groups: Map<string, Card[]>,
+): HandResult | null {
+  const sortedGroups = sortGroupsDesc(groups);
+  const quad = sortedGroups.find((g) => g.length >= 4);
+
+  if (quad) {
+    const kicker = sortDesc(cards.filter((c) => c.rank !== quad[0].rank))[0];
+    return {
+      category: "Four of a Kind",
+      chosen5: [...quad.slice(0, 4), kicker],
+    };
+  }
+
+  return null;
+}
+
+
+export function detectStraightFlush(cards: Card[]): HandResult | null {
+  const suitGroups = new Map<string, Card[]>();
+  for (const card of cards) {
+    const group = suitGroups.get(card.suit) ?? [];
+    group.push(card);
+    suitGroups.set(card.suit, group);
+  }
+
+  let bestStraightFlush: HandResult | null = null;
+
+  for (const group of suitGroups.values()) {
+    if (group.length < 5) continue;
+    const straight = detectStraight(group);
+    if (!straight) continue;
+
+    if (
+      !bestStraightFlush ||
+      straight.chosen5[0].value > bestStraightFlush.chosen5[0].value
+    ) {
+      bestStraightFlush = {
+        category: "Straight Flush",
+        chosen5: straight.chosen5,
+      };
+    }
+  }
+
+  return bestStraightFlush;
+}

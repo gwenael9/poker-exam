@@ -270,3 +270,83 @@ describe("Full House", () => {
     ]);
   });
 });
+
+describe("Four of a Kind", () => {
+  it("should detect four of a kind", () => {
+    const cards = [
+      new Card("A", "spades"),
+      new Card("A", "hearts"),
+      new Card("A", "diamonds"),
+      new Card("A", "clubs"),
+      new Card("K", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.category).toBe("Four of a Kind");
+  });
+
+  it("chosen5 should be the four of a kind and the highest kicker", () => {
+    const cards = [
+      new Card("A", "spades"),
+      new Card("A", "hearts"),
+      new Card("A", "diamonds"),
+      new Card("A", "clubs"),
+      new Card("K", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.chosen5.map((c) => c.rank)).toEqual([
+      "A",
+      "A",
+      "A",
+      "A",
+      "K",
+    ]);
+  });
+});
+
+describe("Straight Flush", () => {
+  it("should detect a straight flush", () => {
+    const cards = [
+      new Card("9", "spades"),
+      new Card("8", "spades"),
+      new Card("7", "spades"),
+      new Card("6", "spades"),
+      new Card("5", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.category).toBe("Straight Flush");
+    expect(result.chosen5.map((c) => c.rank)).toEqual([
+      "9",
+      "8",
+      "7",
+      "6",
+      "5",
+    ]);
+  });
+
+  it("should detect ace-high straight flush", () => {
+    const cards = [
+      new Card("A", "hearts"),
+      new Card("K", "hearts"),
+      new Card("Q", "hearts"),
+      new Card("J", "hearts"),
+      new Card("10", "hearts"),
+      new Card("2", "clubs"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.category).toBe("Straight Flush");
+    expect(result.chosen5.map((c) => c.rank)).toEqual([
+      "A",
+      "K",
+      "Q",
+      "J",
+      "10",
+    ]);
+  });
+});
