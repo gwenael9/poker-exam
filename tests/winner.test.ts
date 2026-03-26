@@ -4,7 +4,7 @@ import { solveRound } from "@/winner";
 import { describe, expect, it } from "vitest";
 
 describe("Global Engine - solveRound", () => {
-  it("Example D: should detect a tie (split pot) when the board plays", () => {
+  it("should detect a tie (split pot) when the board plays", () => {
     const board = [
       new Card("5", "spades"),
       new Card("6", "hearts"),
@@ -112,5 +112,25 @@ describe("Global Engine - Unique Winner", () => {
 
     const outcome = solveRound(board, players);
     expect(outcome.winners).toEqual(["1"]);
+  });
+
+  it("should handle 3 players", () => {
+    const board = [
+      new Card("A", "spades"),
+      new Card("K", "spades"),
+      new Card("Q", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+
+    const players = [
+      { id: "1", hand: [new Card("J", "spades"), new Card("10", "spades")] },
+      { id: "2", hand: [new Card("5", "hearts"), new Card("4", "diamonds")] },
+      { id: "3", hand: [new Card("7", "clubs"), new Card("8", "clubs")] },
+    ];
+
+    const outcome = solveRound(board, players);
+    expect(outcome.winners).toEqual(["1"]);
+    expect(outcome.allPlayers).toHaveLength(3);
   });
 });

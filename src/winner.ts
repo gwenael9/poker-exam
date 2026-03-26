@@ -15,9 +15,7 @@ export function solveRound(board: Card[], players: Player[]) {
 
   const sorted = [...results].sort((a, b) => compareResults(b, a));
 
-  const winners = sorted.filter(
-    (res) => compareResults(res, sorted[0]) === 0
-  );
+  const winners = sorted.filter((res) => compareResults(res, sorted[0]) === 0);
 
   return {
     allPlayers: results,
