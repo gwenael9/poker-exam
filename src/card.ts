@@ -1,3 +1,5 @@
+export type Suit = "hearts" | "diamonds" | "clubs" | "spades";
+
 const RANK_VALUES: Record<string, number> = {
   "2": 2, "3": 3, "4": 4, "5": 5, "6": 6,
   "7": 7, "8": 8, "9": 9, "10": 10,
@@ -7,9 +9,11 @@ const RANK_VALUES: Record<string, number> = {
 export class Card {
   rank: string;
   value: number;
+  suit: Suit;
 
-  constructor(rank: string) {
+  constructor(rank: string,suit: Suit) {
     this.rank = rank;
     this.value = RANK_VALUES[rank];
+    this.suit = suit;
   }
 }
