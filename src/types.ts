@@ -22,3 +22,8 @@ export type Detector = (
   cards: Card[],
   groups: Map<string, Card[]>,
 ) => HandResult | null;
+
+export type Player = {
+  id: string;
+  hand: Card[];
+};

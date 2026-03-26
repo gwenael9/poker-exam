@@ -29,6 +29,5 @@ export function compareResults(handA: HandResult, handB: HandResult): number {
     if (valA !== valB) return valA - valB;
   }
 
-  // 3. Si tout est identique, c'est un split pot
   return 0;
 }
