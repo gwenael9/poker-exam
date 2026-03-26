@@ -1,3 +1,5 @@
+import { Card } from "./card";
+
 export type Suit = "hearts" | "diamonds" | "clubs" | "spades";
 
 export type Category =
@@ -10,3 +12,13 @@ export type Category =
   | "Full House"
   | "Four of a Kind"
   | "Straight Flush";
+
+export type HandResult = {
+  category: Category;
+  chosen5: Card[];
+};
+
+export type Detector = (
+  cards: Card[],
+  groups: Map<string, Card[]>,
+) => HandResult | null;
