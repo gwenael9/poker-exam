@@ -3,12 +3,16 @@ import { Detector, HandResult } from "@/types";
 import { defaultResult, groupByRank } from "./util";
 import {
   detectStraight,
+  detectFlush,
+  detectFullHouse,
   detectThreeOfAKind,
   detectTwoPair,
   detectOnePair,
 } from "./detector";
 
 const detectors: Detector[] = [
+  detectFullHouse,
+  detectFlush,
   detectStraight,
   detectThreeOfAKind,
   detectTwoPair,

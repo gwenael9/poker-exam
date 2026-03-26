@@ -82,3 +82,52 @@ export function detectStraight(cards: Card[]): HandResult | null {
 
   return null;
 }
+
+export function detectFlush(cards: Card[]): HandResult | null {
+  const suitGroups = new Map<string, Card[]>();
+  for (const card of cards) {
+    const group = suitGroups.get(card.suit) ?? [];
+    group.push(card);
+    suitGroups.set(card.suit, group);
+  }
+
+  let bestFlush: Card[] | null = null;
+  for (const [, group] of suitGroups) {
+    if (group.length >= 5) {
+      const sortedGroup = sortDesc(group);
+      const top5 = sortedGroup.slice(0, 5);
+      if (!bestFlush || top5[0].value > bestFlush[0].value) {
+        bestFlush = top5;
+      }
+    }
+  }
+
+  if (bestFlush) {
+    return {
+      category: "Flush",
+      chosen5: bestFlush,
+    };
+  }
+
+  return null;
+}
+
+export function detectFullHouse(
+  cards: Card[],
+  groups: Map<string, Card[]>,
+): HandResult | null {
+  const sortedGroups = sortGroupsDesc(groups);
+  const triplet = sortedGroups.find((g) => g.length === 3);
+  const pair = sortedGroups.find(
+    (g) => g.length >= 2 && g[0].rank !== triplet?.[0].rank,
+  );
+
+  if (triplet && pair) {
+    return {
+      category: "Full House",
+      chosen5: [...triplet, ...pair.slice(0, 2)],
+    };
+  }
+
+  return null;
+}

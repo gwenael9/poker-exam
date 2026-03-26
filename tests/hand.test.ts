@@ -198,3 +198,75 @@ describe("Straight", () => {
     ]);
   });
 });
+
+describe("Flush", () => {
+  it("should detect a flush", () => {
+    const cards = [
+      new Card("A", "spades"),
+      new Card("K", "spades"),
+      new Card("Q", "spades"),
+      new Card("J", "spades"),
+      new Card("9", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.category).toBe("Flush");
+  });
+
+  it("chosen5 should be the top 5 cards of the flush suit", () => {
+    const cards = [
+      new Card("A", "spades"),
+      new Card("K", "spades"),
+      new Card("Q", "spades"),
+      new Card("J", "spades"),
+      new Card("9", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.chosen5.map((c) => c.rank)).toEqual([
+      "A",
+      "K",
+      "Q",
+      "J",
+      "9",
+    ]);
+  });
+});
+
+describe("Full House", () => {
+  it("should detect a full house", () => {
+    const cards = [
+      new Card("A", "spades"),
+      new Card("A", "hearts"),
+      new Card("A", "diamonds"),
+      new Card("K", "clubs"),
+      new Card("K", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.category).toBe("Full House");
+  });
+
+  it("chosen5 should be the triplet and the pair", () => {
+    const cards = [
+      new Card("A", "spades"),
+      new Card("A", "hearts"),
+      new Card("A", "diamonds"),
+      new Card("K", "clubs"),
+      new Card("K", "spades"),
+      new Card("2", "hearts"),
+      new Card("3", "diamonds"),
+    ];
+    const result = evaluateHand(cards);
+    expect(result.chosen5.map((c) => c.rank)).toEqual([
+      "A",
+      "A",
+      "A",
+      "K",
+      "K",
+    ]);
+  });
+});
